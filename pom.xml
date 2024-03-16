@@ -49,6 +49,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>json-verifier</finalName>
     </build>
 
 </project>
