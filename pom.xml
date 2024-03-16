@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.json_parser</groupId>
-    <artifactId>parser</artifactId>
+    <artifactId>validator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>JSON_Parser</name>
     <description>JSON_Parser</description>
