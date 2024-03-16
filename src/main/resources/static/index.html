@@ -10,22 +10,23 @@
     <input type="file" name="file" id="fileInput">
     <button type="submit">Upload File</button>
 </form>
+<div id="responseMessage"></div>
 
 <script>
     document.getElementById('uploadForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        var formData = new FormData();
-        var fileInput = document.getElementById('fileInput').files[0];
+        let formData = new FormData();
+        let fileInput = document.getElementById('fileInput').files[0];
         formData.append('file', fileInput);
 
         fetch('/inputFile', {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
+            .then(response => response.text())
             .then(data => {
-                console.log('Upload successful:', data);
+                document.getElementById('responseMessage').textContent = data;
             })
             .catch(error => {
                 console.error('Error uploading file:', error);

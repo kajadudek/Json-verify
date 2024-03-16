@@ -2,6 +2,7 @@ package com.json_parser.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.json_parser.parser.Exceptions.MissingJsonNodeException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,26 +16,18 @@ public class JsonDataValidator {
     private final String STATEMENT_NODE = "Statement";
 
 
-    public boolean validate(MultipartFile file) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(file.getInputStream());
+    public boolean validate(MultipartFile file) throws MissingJsonNodeException, IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(file.getInputStream());
 
-            if (isIAMRolePolicy(rootNode)) {
-                return !containsAsteriskInAnyResource(rootNode);
-            }
-
-            return false;
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.out.println("Error validating JSON file: " + e.getMessage());
-            return false;
+        if (isIAMRolePolicy(rootNode)) {
+            return !containsAsteriskInAnyResource(rootNode);
         }
+
+        return false;
     }
 
-    private boolean containsAsteriskInAnyResource(JsonNode rootNode) throws Exception {
+    private boolean containsAsteriskInAnyResource(JsonNode rootNode) throws MissingJsonNodeException {
         JsonNode policyDocumentNode = rootNode.path(POLICY_DOCUMENT_NODE);
         JsonNode policyStatements = this.getPolicyStatements(policyDocumentNode);
 
@@ -47,42 +40,42 @@ public class JsonDataValidator {
         return false;
     }
 
-    private boolean containsAsterisk(JsonNode rootNode) throws Exception {
+    private boolean containsAsterisk(JsonNode rootNode) throws MissingJsonNodeException {
         JsonNode resourceNode = rootNode.path(RESOURCE_NODE);
 
         if (resourceNode.isMissingNode()) {
             JsonNode notResourceNode = rootNode.path("NotResource");
             if (notResourceNode.isMissingNode()) {
-                throw new Exception("Missing Resource/NotResource node");
+                throw new MissingJsonNodeException("Resource/NotResource");
             }
             return false;
         }
         else if (resourceNode.isTextual()) {
             String resourceTextValue = resourceNode.textValue();
-            System.out.println(resourceTextValue);
             return resourceTextValue.equals("*");
         }
+
         return false;
     }
 
-    private JsonNode getPolicyStatements(JsonNode policyDocumentNode) throws Exception {
+    private JsonNode getPolicyStatements(JsonNode policyDocumentNode) throws MissingJsonNodeException {
         JsonNode statementsArrayNode = policyDocumentNode.path(STATEMENT_NODE);
 
         if (statementsArrayNode.isMissingNode() || statementsArrayNode.size() == 0){
-            throw new Exception("No statements in this policy");
+            throw new MissingJsonNodeException("Statement");
         }
 
         return statementsArrayNode;
     }
 
-    private boolean isIAMRolePolicy(JsonNode rootNode) throws Exception {
+    private boolean isIAMRolePolicy(JsonNode rootNode) throws MissingJsonNodeException {
         JsonNode policyDocumentNode = rootNode.path(POLICY_DOCUMENT_NODE);
         JsonNode policyNameNode = rootNode.path(POLICY_NAME_NODE);
 
         if (policyDocumentNode.isMissingNode()) {
-            throw new Exception("Missing PolicyDocument property. Invalid JSON");
+            throw new MissingJsonNodeException("PolicyDocument");
         } else if (policyNameNode.isMissingNode()) {
-            throw new Exception("Missing PolicyName property. Invalid JSON");
+            throw new MissingJsonNodeException("PolicyName");
         }
 
         return true;
