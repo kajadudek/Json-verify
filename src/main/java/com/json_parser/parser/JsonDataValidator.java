@@ -50,8 +50,7 @@ public class JsonDataValidator {
                 throw new MissingJsonNodeException("Resource/NotResource");
             }
             return false;
-        }
-        else if (resourceNode.isTextual()) {
+        } else if (resourceNode.isTextual()) {
             String resourceTextValue = resourceNode.textValue();
             return resourceTextValue.equals("*");
         }
@@ -62,7 +61,7 @@ public class JsonDataValidator {
     private JsonNode getPolicyStatements(JsonNode policyDocumentNode) throws MissingJsonNodeException {
         JsonNode statementsArrayNode = policyDocumentNode.path(STATEMENT_NODE);
 
-        if (statementsArrayNode.isMissingNode() || statementsArrayNode.size() == 0){
+        if (statementsArrayNode.isMissingNode() || statementsArrayNode.size() == 0) {
             throw new MissingJsonNodeException("Statement");
         }
 

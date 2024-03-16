@@ -92,8 +92,10 @@ class JsonDataValidatorTest {
                         "{ \"Resource\": \"***\" }," +
                         "{ \"Resource\": \"* example-resource *\" }," +
                         "{ \"Resource\": \"e*xample * res*urce*\" } ] }," +
-                        " \"PolicyName\": " +
-                        "\"example-policy\" }";
+                " \"PolicyName\": " +
+                        "\"example-policy\" }," +
+                " \"Resource\": " +
+                        "\"*\" }";
         MultipartFile file = new MockMultipartFile("file",
                 "test.json",
                 "application/json",

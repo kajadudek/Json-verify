@@ -17,6 +17,7 @@ import java.io.IOException;
 public class JsonDataController {
 
     private final JsonDataService dataService;
+
     @PostMapping
     public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {

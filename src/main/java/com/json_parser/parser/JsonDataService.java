@@ -11,6 +11,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JsonDataService {
     private final JsonDataValidator jsonDataValidator;
+
     public boolean checkFile(MultipartFile file) throws MissingJsonNodeException, IOException {
         return jsonDataValidator.validate(file);
     }
