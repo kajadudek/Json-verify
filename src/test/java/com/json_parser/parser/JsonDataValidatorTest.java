@@ -1,6 +1,7 @@
 package com.json_parser.parser;
 
 import com.json_parser.parser.Exceptions.MissingJsonNodeException;
+import com.json_parser.parser.FileUtils.JsonDataValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;

@@ -1,4 +1,4 @@
-package com.json_parser.parser;
+package com.json_parser.parser.FileUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

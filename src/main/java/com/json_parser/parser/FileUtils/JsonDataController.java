@@ -1,4 +1,4 @@
-package com.json_parser.parser;
+package com.json_parser.parser.FileUtils;
 
 import com.json_parser.parser.Exceptions.MissingJsonNodeException;
 import lombok.RequiredArgsConstructor;
