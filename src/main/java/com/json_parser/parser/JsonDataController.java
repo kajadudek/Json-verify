@@ -27,9 +27,9 @@ public class JsonDataController {
             boolean isValidJson = this.dataService.checkFile(file);
             return ResponseEntity.ok(String.valueOf(isValidJson));
         } catch (MissingJsonNodeException e) {
-            return ResponseEntity.internalServerError().body("Error validating JSON file.\n" + e.getMessage());
+            return ResponseEntity.badRequest().body("Error validating JSON AWS::IAM::Role Policy file.\n" + e.getMessage());
         } catch (IOException e) {
-            return ResponseEntity.badRequest().body("Error input format:\n" + e.getMessage());
+            return ResponseEntity.unprocessableEntity().body("Error input format:\n" + e.getMessage());
         }
     }
 }

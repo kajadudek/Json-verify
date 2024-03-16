@@ -3,6 +3,7 @@ package com.json_parser.parser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.json_parser.parser.Exceptions.MissingJsonNodeException;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,7 @@ public class JsonDataValidator {
     private final String STATEMENT_NODE = "Statement";
 
 
-    public boolean validate(MultipartFile file) throws MissingJsonNodeException, IOException {
+    public boolean validate(@NonNull MultipartFile file) throws MissingJsonNodeException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(file.getInputStream());
 
