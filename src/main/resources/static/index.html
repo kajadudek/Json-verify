@@ -2,35 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>File Upload Example</title>
+    <title>Verify IAM Role Policy</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-<h1>File Upload Example</h1>
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="file" id="fileInput">
-    <button type="submit">Upload File</button>
+<h1>AWS::IAM::Role Policy - Resources verify</h1>
+
+<form id="upload-form" enctype="multipart/form-data">
+    <div class="form-contents">
+        <input type="file" name="file" id="file-input">
+        <button type="submit">Verify File</button>
+    </div>
 </form>
-<div id="responseMessage"></div>
+
+<div id="loading-animation"></div>
+<div id="response-message"></div>
 
 <script>
-    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    const responseMessage = document.getElementById('response-message');
+    const loadingAnimation = document.getElementById('loading-animation');
+
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
         event.preventDefault();
+        responseMessage.style.display = 'none';
+        loadingAnimation.style.display = 'block';
 
         let formData = new FormData();
-        let fileInput = document.getElementById('fileInput').files[0];
+        let fileInput = document.getElementById('file-input').files[0];
         formData.append('file', fileInput);
 
-        fetch('/inputFile', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('responseMessage').textContent = data;
+        if (!fileInput) {
+            responseMessage.textContent = 'Please select a file.';
+            responseMessage.style.display = 'block';
+            loadingAnimation.style.display = 'none';
+        } else {
+            fetch('/inputFile', {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => {
-                console.error('Error uploading file:', error);
-            });
+                .then(response => response.text())
+                .then(data => {
+                    loadingAnimation.style.display = 'none';
+                    responseMessage.textContent = data;
+                    responseMessage.style.display = 'block';
+                })
+                .catch(error => {
+                    loadingAnimation.style.display = 'none';
+                    responseMessage.textContent = 'Error uploading file.';
+                    responseMessage.style.display = 'block';
+                    console.error('Error uploading file:', error);
+                });
+        }
     });
 </script>
 </body>
